@@ -35,6 +35,7 @@ public class Grades_info_input extends AppCompatActivity {
 
     public void insertData() {
         hlp = new HelperDB(this);
+        cv.clear();
         cv.put(Grades.SUBJECTS, subject.getText().toString());
         cv.put(Grades.GRADE, grade.getText().toString());
         cv.put(Grades.TASK_TYPE, task_type.getText().toString());

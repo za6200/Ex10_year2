@@ -36,6 +36,7 @@ public class personal_info_input extends AppCompatActivity {
     public void insertData()
     {
         hlp = new HelperDB(this);
+        cv.clear();
         cv.put(Users.NAME, student_name.getText().toString());
         cv.put(Users.ADDRESS, address.getText().toString());
         cv.put(Users.MOBILE_PHONE, phone_number.getText().toString());

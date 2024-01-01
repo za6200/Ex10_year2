@@ -2,28 +2,40 @@ package com.example.ex10_year2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
 public class show_user_details extends AppCompatActivity {
 
     SQLiteDatabase db;
+    ArrayAdapter<String> adp;
     HelperDB hlp;
     Cursor crsr;
+    Cursor crsr2;
     ArrayList<String> tbl = new ArrayList<>();
+    ListView lvrecords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_user_details);
+        lvrecords = findViewById(R.id.lvrecords);
+        addToTable();
     }
 
     public void addToTable() {
         hlp = new HelperDB(this);
         db = hlp.getReadableDatabase();
+        Intent intent = getIntent();
+
+        // Extract the position from the intent
+        int position = intent.getIntExtra("position", 1);
 
         crsr = db.query(Users.TABLE_USERS, null, null, null, null, null, null);
         int name = crsr.getColumnIndex(Users.NAME);
@@ -34,73 +46,53 @@ public class show_user_details extends AppCompatActivity {
         int parents_number = crsr.getColumnIndex(Users.PARENTS_NUMBER);
 
         String user_name, user_address, user_phone, user_home_phone, users_parents_name, users_parents_number;
+        crsr.moveToPosition(position);
+        user_name = crsr.getString(name);
+        user_address = crsr.getString(address);
+        user_phone = crsr.getString(mobile_phone);
+        user_home_phone = crsr.getString(home_phone);
+        users_parents_name = crsr.getString(parents_name);
+        users_parents_number = crsr.getString(parents_number);
 
-        while (!crsr.isAfterLast()) {
-            user_name = crsr.getString(name);
-            user_address = crsr.getString(address);
-            user_phone = crsr.getString(mobile_phone);
-            user_home_phone = crsr.getString(home_phone);
-            users_parents_name = crsr.getString(parents_name);
-            users_parents_number = crsr.getString(parents_number);
+        String tmp = "user_name: " + user_name;
+        tbl.add(tmp);
+        tmp = "user_address: " + user_address;
+        tbl.add(tmp);
+        tmp = "user_phone: " + user_phone;
+        tbl.add(tmp);
+        tmp = "user_home_phone: " + user_home_phone;
+        tbl.add(tmp);
+        tmp = "users_parents_name: " + users_parents_name;
+        tbl.add(tmp);
+        tmp = "users_parents_number: " + users_parents_number;
+        tbl.add(tmp);
 
-            String tmp = "" + user_name + ", " + user_address + ", " + user_phone + ", " + user_home_phone + ", " + users_parents_name + ", " + users_parents_number;
-            tbl.add(tmp);
+        crsr2 = db.query(Grades.TABLE_GRADES, null, null, null, null, null, null);
+        int subject_col = crsr2.getColumnIndex(Grades.SUBJECTS);
+        int grade_col = crsr2.getColumnIndex(Grades.GRADE);
 
-            crsr.moveToNext();
-        }
+        int task_col = crsr2.getColumnIndex(Grades.TASK_TYPE);
+        int quarter_col = crsr2.getColumnIndex(Grades.QUARTER);
 
-        crsr = db.query(Grades.TABLE_GRADES, null, null, null, null, null, null);
-        int key_col = crsr.getColumnIndex(Grades.KEY_ID);
-        int grade_col = crsr.getColumnIndex(Grades.GRADE);
-        int subject_col = crsr.getColumnIndex(Grades.SUBJECTS);
-        int task_col = crsr.getColumnIndex(Grades.TASK_TYPE);
-        int quarter_col = crsr.getColumnIndex(Grades.QUARTER);
-
-        int key, grade, quarter;  // Declare these variables
+        int grade, quarter;  // Declare these variables
         String subject, task;
+        crsr2.moveToPosition(position);
+        subject = crsr2.getString(subject_col);
+        grade = crsr2.getInt(grade_col);
+        task = crsr2.getString(task_col);
+        quarter = crsr2.getInt(quarter_col);
 
-        crsr.moveToFirst();
-        while (!crsr.isAfterLast()) {
-            key = crsr.getInt(key_col);
-            grade = crsr.getInt(grade_col);
-            subject = crsr.getString(subject_col);
-            task = crsr.getString(task_col);
-            quarter = crsr.getInt(quarter_col);
-
-            String tmp = "" + key + ", " + grade + ", " + subject + ", " + task + ", " + quarter;
-            tbl.add(tmp);
-
-            crsr.moveToNext();
-        }
-        crsr.close();
+        tmp = "subject: " + subject;
+        tbl.add(tmp);
+        tmp = "grade: " + grade;
+        tbl.add(tmp);
+        tmp = "task: " + task;
+        tbl.add(tmp);
+        tmp = "quarter: " + quarter;
+        tbl.add(tmp);
+        adp = new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, tbl);
+        lvrecords.setAdapter(adp);
+        crsr2.close();
         db.close();
     }
 }
-
-/*
-crsr = db.query(Grades.TABLE_GRADES, null, null, null, null, null, null);
-        int key_col = crsr.getColumnIndex(Grades.KEY_ID);
-        int grade_col = crsr.getColumnIndex(Grades.GRADE);
-        int subject_col = crsr.getColumnIndex(Grades.SUBJECTS);
-        int task_col = crsr.getColumnIndex(Grades.TASK_TYPE);
-        int quarter_col = crsr.getColumnIndex(Grades.QUARTER);
-
-        int key, grade, quarter;  // Declare these variables
-        String subject, task;
-
-        crsr.moveToFirst();
-        while (!crsr.isAfterLast()) {
-        key = crsr.getInt(key_col);
-        grade = crsr.getInt(grade_col);
-        subject = crsr.getString(subject_col);
-        task = crsr.getString(task_col);
-        quarter = crsr.getInt(quarter_col);
-
-        String tmp = "" + grade;// + ", " + grade + ", " + subject + ", " + task + ", " + quarter;
-        tbl.add(tmp);
-        crsr.moveToNext();
-        }
-        crsr.close();
-        db.close();
-        adp = new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, tbl);
-        lvrecords.setAdapter(adp);*/

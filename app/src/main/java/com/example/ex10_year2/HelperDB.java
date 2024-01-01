@@ -18,14 +18,6 @@ public class HelperDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        strCreate="CREATE TABLE "+Grades.TABLE_GRADES;
-        strCreate+=" ("+Grades.KEY_ID+" INTEGER,";
-        strCreate+=" "+Grades.SUBJECTS+" TEXT,";
-        strCreate+=" "+Grades.GRADE+" INTEGER,";
-        strCreate+=" "+Grades.TASK_TYPE+" TEXT,";
-        strCreate+=" "+Grades.QUARTER+" INTEGER";
-        strCreate+=");";
-        db.execSQL(strCreate);
         strCreate="CREATE TABLE "+Users.TABLE_USERS;
         strCreate+=" ("+ Users.KEY_ID+" INTEGER PRIMARY KEY,";
         strCreate+=" "+ Users.NAME+" TEXT,";
@@ -36,6 +28,15 @@ public class HelperDB extends SQLiteOpenHelper {
         strCreate+=" "+Users.PARENTS_NUMBER+" INTEGER";
         strCreate+=");";
         db.execSQL(strCreate);
+        strCreate="CREATE TABLE "+Grades.TABLE_GRADES;
+        strCreate+=" ("+Grades.KEY_ID+" INTEGER,";
+        strCreate+=" "+Grades.SUBJECTS+" TEXT,";
+        strCreate+=" "+Grades.GRADE+" INTEGER,";
+        strCreate+=" "+Grades.TASK_TYPE+" TEXT,";
+        strCreate+=" "+Grades.QUARTER+" INTEGER";
+        strCreate+=");";
+        db.execSQL(strCreate);
+
     }
 
     @Override

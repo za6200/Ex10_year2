@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Ex10_year2"
         tools:targetApi="31">
         <activity
+            android:name=".edit_user"
+            android:exported="false" />
+        <activity
             android:name=".show_user_details"
             android:exported="false" />
         <activity
