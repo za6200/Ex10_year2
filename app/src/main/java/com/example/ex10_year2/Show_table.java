@@ -2,6 +2,7 @@ package com.example.ex10_year2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,10 +14,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 
-public class Show_table extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnCreateContextMenuListener{
+public class Show_table extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnCreateContextMenuListener, AdapterView.OnItemSelectedListener{
     SQLiteDatabase db;
     HelperDB hlp;
     Cursor crsr;
@@ -24,19 +26,27 @@ public class Show_table extends AppCompatActivity implements AdapterView.OnItemC
     ArrayList<String> tbl = new ArrayList<>();
 
     ArrayAdapter<String> adp;
+    ArrayAdapter<String> adp_spinner;
+    Spinner spinner;
     Intent get_student_info;
     Intent editUserIntent;
+    Intent sortingIntent;
+    int position;
+    String[] options = {"sort grade", "sort name", "sort quarter"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_table);
         lvrecords = findViewById(R.id.lvrecords);
+        spinner = findViewById(R.id.spinner);
         lvrecords.setOnCreateContextMenuListener(this);
-
+        setSpinner();
         addToTable();
 
         get_student_info = new Intent(this, show_user_details.class);
         editUserIntent = new Intent(this, edit_user.class);
+        sortingIntent = new Intent(this, sorting.class);
     }
 
 
@@ -61,6 +71,14 @@ public class Show_table extends AppCompatActivity implements AdapterView.OnItemC
         lvrecords.setAdapter(adp);
         crsr.close();
         db.close();
+    }
+
+    public void setSpinner()
+    {
+        spinner.setOnItemSelectedListener(this);
+        adp_spinner = new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, options);
+        spinner.setAdapter(adp_spinner);
+
     }
 
 
@@ -95,7 +113,7 @@ public class Show_table extends AppCompatActivity implements AdapterView.OnItemC
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        int position = info.position;
+        position = info.position;
 
         String oper = item.getTitle().toString();
         if (oper.equals("Show details")) {
@@ -109,5 +127,37 @@ public class Show_table extends AppCompatActivity implements AdapterView.OnItemC
             removeFromTable(position);
         }
         return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
+    {
+        if(i == 0)
+        {
+            // sorting grade
+            sortingIntent.putExtra("option", 0);
+            sortingIntent.putExtra("position", position);
+            startActivity(sortingIntent);
+        }
+        else if(i == 1)
+        {
+            // sort name
+            sortingIntent.putExtra("option", 1);
+            sortingIntent.putExtra("position", position);
+            startActivity(sortingIntent);
+        }
+        else if(i == 2)
+        {
+            // sort quarter
+            sortingIntent.putExtra("option", 2);
+            sortingIntent.putExtra("position", position);
+            startActivity(sortingIntent);
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

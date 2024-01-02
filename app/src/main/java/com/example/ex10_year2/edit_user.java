@@ -127,7 +127,7 @@ public class edit_user extends AppCompatActivity {
         db = hlp.getWritableDatabase();
 
         // Update the user details in the database
-        db.update(Users.TABLE_USERS, userCV, Users.KEY_ID + "=?", new String[]{String.valueOf(position + 2)});
+        db.update(Users.TABLE_USERS, userCV, Users.KEY_ID + "=?", new String[]{String.valueOf(position + 1)});
 
         db.close();
     }
@@ -149,7 +149,7 @@ public class edit_user extends AppCompatActivity {
         gradeCV.put(Grades.TASK_TYPE, editedTaskType);
         gradeCV.put(Grades.QUARTER, editedQuarter);
 
-        db.update(Grades.TABLE_GRADES, gradeCV, Grades.KEY_ID + "=?", new String[]{String.valueOf(position + 2)});
+        db.update(Grades.TABLE_GRADES, gradeCV, Grades.KEY_ID + "=?", new String[]{String.valueOf(position + 1)});
 
         // Close the database
         db.close();
