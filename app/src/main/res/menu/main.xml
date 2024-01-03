@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/credits"
+        android:title="credit"
+        android:orderInCategory="100" />
+    <item
+        android:id="@+id/personal_input"
+        android:title="personal input"
+        android:orderInCategory="200"/>
+    <item
+        android:id="@+id/grade_input"
+        android:title="grade input"
+        android:orderInCategory="300"/>
+    <item
+        android:id="@+id/show_table"
+        android:title="show table"
+        android:orderInCategory="400"/>
+    <item
+        android:id="@+id/sorting"
+        android:title="sorting"
+        android:orderInCategory="500"/>
+    <item
+        android:id="@+id/show_details"
+        android:title="show details"
+        android:orderInCategory="600"/>
+
+
+</menu>

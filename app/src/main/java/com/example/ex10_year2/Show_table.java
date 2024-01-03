@@ -1,5 +1,6 @@
 package com.example.ex10_year2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -9,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,8 +33,14 @@ public class Show_table extends AppCompatActivity implements AdapterView.OnItemC
     Intent get_student_info;
     Intent editUserIntent;
     Intent sortingIntent;
+    Intent personal_input;
+    Intent grades_input;
+    Intent show_table;
+    Intent sorting;
+    Intent show_details;
+    Intent credit;
     int position;
-    String[] options = {"sort grade", "sort name", "sort quarter"};
+    String[] options = {"choice", "sort grade", "sort name", "sort quarter"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,12 @@ public class Show_table extends AppCompatActivity implements AdapterView.OnItemC
         get_student_info = new Intent(this, show_user_details.class);
         editUserIntent = new Intent(this, edit_user.class);
         sortingIntent = new Intent(this, sorting.class);
+        personal_input = new Intent(this, personal_info_input.class);
+        grades_input = new Intent(this, Grades_info_input.class);
+        show_table = new Intent(this, Show_table.class);
+        sorting = new Intent(this, sorting.class);
+        show_details = new Intent(this, show_user_details.class);
+        credit = new Intent(this, credits.class);
     }
 
 
@@ -134,23 +148,24 @@ public class Show_table extends AppCompatActivity implements AdapterView.OnItemC
     {
         if(i == 0)
         {
+
+        }
+        if(i == 1)
+        {
             // sorting grade
             sortingIntent.putExtra("option", 0);
-            sortingIntent.putExtra("position", position);
-            startActivity(sortingIntent);
-        }
-        else if(i == 1)
-        {
-            // sort name
-            sortingIntent.putExtra("option", 1);
-            sortingIntent.putExtra("position", position);
             startActivity(sortingIntent);
         }
         else if(i == 2)
         {
+            // sort name
+            sortingIntent.putExtra("option", 1);
+            startActivity(sortingIntent);
+        }
+        else if(i == 3)
+        {
             // sort quarter
             sortingIntent.putExtra("option", 2);
-            sortingIntent.putExtra("position", position);
             startActivity(sortingIntent);
         }
 
@@ -159,5 +174,38 @@ public class Show_table extends AppCompatActivity implements AdapterView.OnItemC
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        String st = item.getTitle().toString();
+        if (st.equals("credit")) {
+            startActivity(credit);
+        }
+        else if(st.equals("personal input"))
+        {
+            startActivity(personal_input);
+        }
+        else if(st.equals("grade input"))
+        {
+            startActivity(grades_input);
+        }
+        else if(st.equals("show table"))
+        {
+            startActivity(show_table);
+        }
+        else if(st.equals("sorting"))
+        {
+            startActivity(sorting);
+        }
+        else if(st.equals("show details"))
+        {
+            startActivity(show_details);
+        }
+        return true;
     }
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".sorting">
+    tools:context=".credits">
 
     <Space
         android:layout_width="0dp"
@@ -14,7 +14,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="4"
+        android:layout_weight="5"
         android:orientation="vertical">
 
         <Space
@@ -22,33 +22,20 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <EditText
-            android:id="@+id/nameET"
+        <TextView
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
-            android:ems="10"
-            android:hint="sort by:"
-            android:inputType="text" />
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="TextView"
+            android:textSize="34sp" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/search"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:onClick="show_user_details"
-            android:text="Search"
-            android:textSize="24sp" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="7" />
     </LinearLayout>
 
     <Space

@@ -1,5 +1,6 @@
 package com.example.ex10_year2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
@@ -7,6 +8,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -30,11 +33,23 @@ public class edit_user extends AppCompatActivity {
     EditText taskTypeEditText;
     EditText quarterEditText;
     Intent get_show_table;
+    Intent personal_input;
+    Intent grades_input;
+    Intent show_table;
+    Intent sorting;
+    Intent show_details;
+    Intent credit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user);
+        personal_input = new Intent(this, personal_info_input.class);
+        grades_input = new Intent(this, Grades_info_input.class);
+        show_table = new Intent(this, Show_table.class);
+        sorting = new Intent(this, sorting.class);
+        show_details = new Intent(this, show_user_details.class);
+        credit = new Intent(this, credits.class);
 
         hlp = new HelperDB(this);
         db = hlp.getReadableDatabase();
@@ -62,6 +77,7 @@ public class edit_user extends AppCompatActivity {
     }
 
     private void loadUserDetails() {
+        hlp = new HelperDB(this);
         db = hlp.getReadableDatabase();
 
         // Load user details
@@ -129,10 +145,6 @@ public class edit_user extends AppCompatActivity {
         // Update the user details in the database
         db.update(Users.TABLE_USERS, userCV, Users.KEY_ID + "=?", new String[]{String.valueOf(position + 1)});
 
-        db.close();
-    }
-
-    private void saveGradeDetails() {
         // Get the edited values from EditText fields
         String editedSubject = subjectEditText.getText().toString();
         int editedGrade = Integer.parseInt(gradeEditText.getText().toString());
@@ -155,9 +167,45 @@ public class edit_user extends AppCompatActivity {
         db.close();
     }
 
+    private void saveGradeDetails() {
+
+    }
+
     public void confirm(View view) {
         saveUserDetails();
-        saveGradeDetails();
         startActivity(get_show_table);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        String st = item.getTitle().toString();
+        if (st.equals("credit")) {
+            startActivity(credit);
+        }
+        else if(st.equals("personal input"))
+        {
+            startActivity(personal_input);
+        }
+        else if(st.equals("grade input"))
+        {
+            startActivity(grades_input);
+        }
+        else if(st.equals("show table"))
+        {
+            startActivity(show_table);
+        }
+        else if(st.equals("sorting"))
+        {
+            startActivity(sorting);
+        }
+        else if(st.equals("show details"))
+        {
+            startActivity(show_details);
+        }
+        return true;
     }
 }
