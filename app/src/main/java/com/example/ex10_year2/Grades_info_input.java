@@ -17,7 +17,6 @@ public class Grades_info_input extends AppCompatActivity {
     EditText grade;
     SQLiteDatabase db;
     HelperDB hlp;
-    ContentValues cv = new ContentValues();
     Intent get_show_table;
     Intent personal_input;
     Intent grades_input;
@@ -50,6 +49,7 @@ public class Grades_info_input extends AppCompatActivity {
 
     public void insertData() {
         hlp = new HelperDB(this);
+        ContentValues cv = new ContentValues();
         cv.clear();
         cv.put(Grades.SUBJECTS, subject.getText().toString());
         cv.put(Grades.GRADE, grade.getText().toString());

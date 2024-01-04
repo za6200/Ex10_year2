@@ -72,50 +72,38 @@ public class sorting extends AppCompatActivity {
         hlp = new HelperDB(this);
         db = hlp.getReadableDatabase();
 
-        crsr2 = db.query(Grades.TABLE_GRADES, null, null, null, null, null, null);
-        int grade_col = crsr2.getColumnIndex(Grades.GRADE);
+        try {
+            crsr2 = db.query(Grades.TABLE_GRADES, null, null, null, null, null, Grades.GRADE + " DESC");
 
-        int grade = 0;
-        int grade1 = 0;
-        crsr2.moveToFirst();
-        grade = crsr2.getInt(grade_col);
-        int gradeArr[];
-        int count = 0;
+            int count = 0;
 
-        crsr.moveToFirst();
-        int best_grade = crsr2.getInt(grade_col);
-        while (!crsr.isAfterLast())
-        {
-            grade = crsr2.getInt(grade_col);
-            while (!crsr.isAfterLast())
-            {
-                grade1 = crsr2.getInt(grade_col);
-                if(grade > grade1)
-                {
-                    best_grade = grade;
+            crsr2.moveToFirst();
+            while (!crsr2.isAfterLast()) {
+                int grade_col = crsr2.getColumnIndex(Grades.GRADE);
+                int grade = crsr2.getInt(grade_col);
+                int grade_input = Integer.parseInt(nameET.getText().toString());
+
+                // Filter students with the specified grade
+                if (grade == grade_input) {
+                    get_student_info.putExtra("position", count);
+                    startActivity(get_student_info);
+                    break; // Exit the loop once a match is found
                 }
-                else
-                {
-                    best_grade = grade1;
-                }
-
 
                 crsr2.moveToNext();
-                get_student_info.putExtra("position", count);
-                startActivity(get_student_info);
                 count++;
             }
-
+        } catch (NumberFormatException e) {
+            // Handle the exception
+            Toast.makeText(getApplicationContext(), "Invalid input for grade!", Toast.LENGTH_SHORT).show();
+        } finally {
+            crsr2.close();
+            db.close();
         }
-
-
-
-        crsr.close();
-        crsr2.close();
-        db.close();
     }
-    public void sortByName()
-    {
+
+
+    public void sortByName() {
         hlp = new HelperDB(this);
         db = hlp.getReadableDatabase();
         crsr = db.query(Users.TABLE_USERS, null, null, null, null, null, null);
@@ -123,59 +111,63 @@ public class sorting extends AppCompatActivity {
         String user_name_input = nameET.getText().toString();
         String user_name = "";
         int count = 0, check = 0;
+
         crsr.moveToFirst();
-        while (!crsr.isAfterLast())
-        {
+        while (!crsr.isAfterLast()) {
             user_name = crsr.getString(name);
-            if(user_name.equals(user_name_input))
-            {
-                check = 1;
+
+            // Filter students with the specified name
+            if (user_name.equals(user_name_input)) {
                 get_student_info.putExtra("position", count);
+                startActivity(get_student_info);
+                check = 1; // Set the check flag
+                break; // Exit the loop once a match is found
             }
+
             count++;
             crsr.moveToNext();
         }
-        if(check == 0)
-        {
+
+        if (check == 0) {
             Toast.makeText(getApplicationContext(), "The name provided is not in the list!!", Toast.LENGTH_SHORT).show();
         }
-        crsr.close();
 
+        crsr.close();
+        db.close();
     }
+
     public void sortByQuarter() {
         hlp = new HelperDB(this);
         db = hlp.getReadableDatabase();
-        crsr2 = db.query(Grades.TABLE_GRADES, null, null, null, null, null, null);
-        int quarter_col = crsr2.getColumnIndex(Grades.QUARTER);
 
         try {
             int quarter2 = Integer.parseInt(nameET.getText().toString());
-            int quarter = 0;
             int count = 0;
             int check = 0;
 
+            crsr2 = db.query(Grades.TABLE_GRADES, null, Grades.QUARTER + "=?", new String[]{String.valueOf(quarter2)}, null, null, null);
+
             crsr2.moveToFirst();
             while (!crsr2.isAfterLast()) {
-                quarter = crsr2.getInt(quarter_col);
-                if (quarter == quarter2) {
-                    check = 1;
-                    get_student_info.putExtra("position", count);
-                    startActivity(get_student_info);
-                }
+                get_student_info.putExtra("position", count);
+                startActivity(get_student_info);
+                check = 1;
                 count++;
                 crsr2.moveToNext();
             }
 
             if (check == 0) {
-                Toast.makeText(getApplicationContext(), "The quarter provided is not in the list!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "No records found for the specified quarter!!", Toast.LENGTH_SHORT).show();
             }
-        } catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
+            // Handle the exception
+            Toast.makeText(getApplicationContext(), "Invalid input for quarter!", Toast.LENGTH_SHORT).show();
+        } finally {
+            crsr2.close();
+            db.close();
         }
-
-        db.close();
-        crsr2.close();
     }
+
 
 
     public void show_user_details(View view)
